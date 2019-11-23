@@ -8,7 +8,7 @@ from irekua_database.models import Item
 
 
 class CollectionItemAnnotatorView(TemplateView):
-    template_name = 'selia_uploader/annotator.html'
+    template_name = 'selia_annotator/annotator.html'
     no_permission_template = 'selia_templates/generic/no_permission.html'
 
     def has_view_permission(self):
@@ -29,7 +29,7 @@ class CollectionItemAnnotatorView(TemplateView):
         collection = self.item.sampling_event_device.sampling_event.collection
         return {
             'terms_autocomplete': reverse(
-                'irekua_autocomplete:term',
+                'irekua_autocomplete:term_autocomplete',
                 args=[mark_safe('event_type_pk')]),
             'item': reverse(
                 'irekua_rest_api:item-detail',

@@ -6,7 +6,7 @@
 {% load static %}
 
 {% block secondary-navbar %}
-  {% include 'selia_templates/navbar.html' %}
+  {% include 'selia_annotator/navbar.html' %}
 {% endblock secondary-navbar %}
 
 
@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block toolbar-items %}
-  {% include 'selia_templates/toolbar.html' %}
+  {% include 'selia_annotator/toolbar.html' %}
 {% endblock toolbar-items %}
 
 {% block main-content %}
@@ -27,7 +27,7 @@
 {{ block.super }}
 <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
-<script type="text/javascript" src="{% static 'selia_annotator/annotator/annotator.js' %}"></script>
+<script type="text/javascript" src="{% static 'selia_annotator/annotator.js' %}"></script>
 
 <script type="text/javascript">
   let Annotator = annotator.default;

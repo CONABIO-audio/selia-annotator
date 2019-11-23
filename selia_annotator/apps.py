@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class SeliaConfig(AppConfig):
-    name = 'selia'
+class SeliaAnnotatorConfig(AppConfig):
+    name = 'selia_annotator'
