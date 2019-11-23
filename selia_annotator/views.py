@@ -46,6 +46,9 @@ class CollectionItemAnnotatorView(TemplateView):
             'annotation_detail': reverse(
                 'irekua_rest_api:annotation-detail',
                 args=[mark_safe('annotation_pk')]),
+            'visualizers': reverse(
+                'selia_visualizers:get_visualizer'
+            )
         }
 
     def get_objects(self):

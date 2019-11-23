@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'irekua_rest_api',
     'selia_templates',
     'selia_annotator',
+    'selia_visualizers',
     'rest_framework',
 ]
 

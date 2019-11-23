@@ -23,7 +23,8 @@ setup(
         'irekua_permissions',
         'irekua_rest_api',
         'irekua_autocomplete',
-        'selia_templates'
+        'selia_templates',
+        'selia_visualizers',
     ],
     classifiers=[
         'Environment :: Web Environment',

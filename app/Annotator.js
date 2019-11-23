@@ -1,9 +1,10 @@
 import React from 'react';
+import jQuery from 'jquery';
+
 import AnnotationCreator from './AnnotationCreator';
 import AnnotationList from './AnnotationList';
 import AnnotationDetail from './AnnotationDetail';
 
-import ImageVisualizer from './visualizer/imageVisualizer';
 import PointAnnotator from './visualizer/PointAnnotator';
 import BoundingBoxAnnotator from './visualizer/BoundingBox';
 
@@ -162,7 +163,7 @@ class Annotator extends React.Component {
   getItemTypeInfo() {
     let url = this.props.urls['item_type']
 
-    fetch(url)
+    return fetch(url)
       .then(result => result.json())
       .then(result => {
         this.setState((state) => {
@@ -174,10 +175,17 @@ class Annotator extends React.Component {
   }
 
   getVisualizer() {
-    this.setState(state => {
-      state.components.visualizer = ImageVisualizer;
-      state.ready.visualizer = true;
-      return state;
+    let url = this.props.urls['visualizers'];
+    let itemType = this.state.info.itemType;
+
+    let fullUrl = url + encodeURI(`?item_type=${itemType.id}`);
+    import(/* webpackIgnore: true */fullUrl).then(module => {
+      let visualizer = Visualizer.default;
+      this.setState(state => {
+        state.components.visualizer = visualizer;
+        state.ready.visualizer = true;
+        return state;
+      })
     })
   }
 
@@ -193,10 +201,9 @@ class Annotator extends React.Component {
   }
 
   componentDidMount() {
-    this.getItemTypeInfo();
+    this.getItemTypeInfo().then(() => this.getVisualizer());
     this.getItemInfo();
     this.getAnnotationTypesInfo();
-    this.getVisualizer();
     this.getAnnotationTools();
   }
 
