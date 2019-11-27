@@ -21,7 +21,7 @@ class AnnotationToolBar extends React.Component {
   renderAnnotationTypeOption(data) {
     let className = "border p-2 mx-1 shadow-sm btn ";
 
-    if (this.props.active && this.props.selected === data.name) {
+    if (this.props.active && this.props.selected === data.annotation_type) {
       className += 'btn-primary';
     } else {
       className += 'btn-light';

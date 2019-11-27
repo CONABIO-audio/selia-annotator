@@ -1,10 +1,28 @@
 from django.urls import reverse
 from django.utils.html import mark_safe
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
 
 from irekua_database.models import Item
+from selia_annotator.models import AnnotationToolComponent
+
+
+@require_http_methods(["GET"])
+def get_annotator(request):
+    annotation_type = request.GET.get('annotation_type', None)
+    annotator_component = get_object_or_404(
+        AnnotationToolComponent,
+        annotation_tool__annotation_type=annotation_type,
+        is_active=True)
+
+    response = {
+        "annotation_tool": annotator_component.annotation_tool.pk,
+        "file_url": annotator_component.javascript_file.url
+    }
+    return JsonResponse(response)
 
 
 class CollectionItemAnnotatorView(TemplateView):
@@ -46,9 +64,8 @@ class CollectionItemAnnotatorView(TemplateView):
             'annotation_detail': reverse(
                 'irekua_rest_api:annotation-detail',
                 args=[mark_safe('annotation_pk')]),
-            'visualizers': reverse(
-                'selia_visualizers:get_visualizer'
-            )
+            'visualizers': reverse('selia_visualizers:get_visualizer'),
+            'annotation_tools': reverse('selia_annotator:get_annotator'),
         }
 
     def get_objects(self):

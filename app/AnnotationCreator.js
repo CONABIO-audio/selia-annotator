@@ -11,7 +11,7 @@ class AnnotatorCreator extends React.Component {
 
     let visualizer = this.props.visualizer;
     this.annotationData = {
-      item: props.info.item,
+      item: props.info.item.id,
     };
 
     this.state = {
@@ -89,6 +89,10 @@ class AnnotatorCreator extends React.Component {
       this.annotationData['annotation_type'] = data['annotationType'];
     }
 
+    if ('annotationTool' in data) {
+      this.annotationData['annotation_tool'] = data['annotationTool'];
+    }
+
     if ('annotation' in data) {
       this.annotationData['annotation'] = data['annotation'];
     }
@@ -117,8 +121,12 @@ class AnnotatorCreator extends React.Component {
       this.annotationData['annotation_tool'] = data['annotationTool'];
     }
 
-    if ('annotationConfiguration' in data) {
-      this.annotationData['annotation_configuration'] = data['annotationConfiguration'];
+    if ('visualizer' in data) {
+      this.annotationData['visualizer'] = data['visualizer'];
+    }
+
+    if ('visualizerConfiguration' in data) {
+      this.annotationData['visualizer_configuration'] = data['visualizerConfiguration'];
     }
 
     this.checkIfReady();
@@ -128,6 +136,8 @@ class AnnotatorCreator extends React.Component {
     let ready = true;
     if (!('annotation_type' in this.annotationData)) ready = false;
     if (!('annotation' in this.annotationData)) ready = false;
+    if (!('visualizer' in this.annotationData)) ready = false;
+    if (!('visualizer_configuration' in this.annotationData)) ready = false;
     if (!('event_type' in this.annotationData)) ready = false;
     if (!('labels' in this.annotationData) || this.annotationData.labels.size === 0) ready = false;
 

@@ -151,6 +151,10 @@ class AnnotationDetail extends React.Component {
       this.annotationData['annotation'] = data['annotation'];
     }
 
+    if ('annotationTool' in data) {
+      this.annotationData['annotation_tool'] = data['annotationTool'];
+    }
+
     if ('labels' in data) {
       this.annotationData['labels'] = data['labels'];
     }
@@ -167,12 +171,12 @@ class AnnotationDetail extends React.Component {
       this.annotationData['certainty'] = data['certainty'];
     }
 
-    if ('annotationConfiguration' in data) {
-      this.annotationData['annotation_configuration'] = data['annotationConfiguration'];
+    if ('visualizerConfiguration' in data) {
+      this.annotationData['visualizer_configuration'] = data['visualizerConfiguration'];
     }
 
-    if ('annotation_configuration' in data) {
-      this.annotationData['annotation_configuration'] = data['annotation_configuration'];
+    if ('visualizer_configuration' in data) {
+      this.annotationData['visualizer_configuration'] = data['visualizer_configuration'];
     }
 
     this.checkIfReady();
@@ -181,6 +185,7 @@ class AnnotationDetail extends React.Component {
   checkIfReady() {
     let ready = true;
     if (!('annotation' in this.annotationData)) ready = false;
+    if (!('visualizer_configuration' in this.annotationData)) ready = false;
     if (!('labels' in this.annotationData) || this.annotationData.labels.length === 0) ready = false;
 
     if (!(this.state.ready) && ready) {

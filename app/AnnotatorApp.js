@@ -5,11 +5,8 @@ import AnnotationCreator from './AnnotationCreator';
 import AnnotationList from './AnnotationList';
 import AnnotationDetail from './AnnotationDetail';
 
-import PointAnnotator from './visualizer/PointAnnotator';
-import BoundingBoxAnnotator from './visualizer/BoundingBox';
 
-
-class Annotator extends React.Component {
+class AnnotatorApp extends React.Component {
   constructor(props) {
     super(props);
 
@@ -29,7 +26,7 @@ class Annotator extends React.Component {
         annotationTypes: {},
       },
       components: {
-        visualizer: {},
+        visualizer: null,
         annotators: {},
       }
     }
@@ -135,7 +132,7 @@ class Annotator extends React.Component {
   getAnnotationTypesInfo() {
     let url = this.props.urls['annotation_types'] + '?page_size=99'
 
-    fetch(url)
+    return fetch(url)
       .then(result => result.json())
       .then(result => {
         this.setState(state => {
@@ -179,32 +176,64 @@ class Annotator extends React.Component {
     let itemType = this.state.info.itemType;
 
     let fullUrl = url + encodeURI(`?item_type=${itemType.id}`);
-    import(/* webpackIgnore: true */fullUrl).then(module => {
-      let visualizer = Visualizer.default;
-      this.setState(state => {
-        state.components.visualizer = visualizer;
-        state.ready.visualizer = true;
-        return state;
+
+    fetch(fullUrl)
+      .then(result => result.json())
+      .then(result => {
+        import(/* webpackIgnore: true */result.file_url).then(module => {
+          let visualizer = Visualizer.default;
+          this.setState(state => {
+            state.components.visualizer = visualizer;
+            state.components.visualizer_id = result.visualizer;
+            state.ready.visualizer = true;
+            return state;
+          })
+        })
       })
-    })
   }
 
   getAnnotationTools() {
-    this.setState(state => {
-      state.components.annotators = {
-        'Bounding Box': BoundingBoxAnnotator,
-        'Punto': PointAnnotator,
-      }
-      state.ready.annotators = true;
-      return state;
+    this.state.info.annotationTypes.forEach((annotationTypeInfo) => {
+      let url = this.props.urls.annotation_tools + encodeURI(`?annotation_type=${annotationTypeInfo.annotation_type}`);
+      fetch(url)
+        .then(result => result.json())
+        .then(result => {
+          import(/* webpackIgnore: true */result.file_url).then(module => {
+            let annotator_component = AnnotatorTool.default;
+            this.setState(state => {
+              state.components.annotators[annotationTypeInfo.annotation_type] = {
+                annotator: annotator_component,
+                annotation_tool: result.annotation_tool
+              };
+              return state;
+            }, () => this.checkAnnotatorDownload());
+          })
+        });
     })
   }
 
+  checkAnnotatorDownload() {
+    let finished = true;
+    for (var index in this.state.info.annotationTypes) {
+      let annotationTypeInfo = this.state.info.annotationTypes[index];
+      if (!(annotationTypeInfo.annotation_type in this.state.components.annotators)) {
+        finished = false;
+        break;
+      }
+    }
+
+    if (finished) {
+      this.setState(state => {
+        state.ready.annotators = true;
+        return state
+      })
+    }
+  }
+
   componentDidMount() {
-    this.getItemTypeInfo().then(() => this.getVisualizer());
     this.getItemInfo();
-    this.getAnnotationTypesInfo();
-    this.getAnnotationTools();
+    this.getItemTypeInfo().then(() => this.getVisualizer());
+    this.getAnnotationTypesInfo().then(() => this.getAnnotationTools());
   }
 
   isReady() {
@@ -217,4 +246,4 @@ class Annotator extends React.Component {
   }
 }
 
-export default Annotator;
+export default AnnotatorApp;

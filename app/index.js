@@ -1,3 +1,3 @@
-import Annotator from './Annotator';
+import AnnotatorApp from './AnnotatorApp';
 
-export default Annotator;
+export default AnnotatorApp;

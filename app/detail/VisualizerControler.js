@@ -52,7 +52,7 @@ class VisualizerControler extends React.Component {
     focus() {
       if (!(this.visualizer)) return;
 
-      this.visualizer.setConfig(this.props.initial.annotation_configuration);
+      this.visualizer.setConfig(this.props.initial.visualizer_configuration);
     }
 
     renderVisualizerToolbar() {
@@ -96,8 +96,7 @@ class VisualizerControler extends React.Component {
     }
 
     loadAnnotator() {
-      let annotation_type = this.getAnnotationTypeInfo(this.props.initial.annotation_type);
-      let annotationComponent = this.props.components.annotators[annotation_type.name];
+      let annotationComponent = this.props.components.annotators[this.props.initial.annotation_type].annotator;
 
       this.annotator = new annotationComponent({
         canvas: this.annotatorCanvas,
@@ -129,7 +128,7 @@ class VisualizerControler extends React.Component {
 
       this.props.setAnnotationInfo({
         annotation: this.props.initial.annotation,
-        annotationConfiguration: this.props.initial.annotation_configuration,
+        annotationConfiguration: this.props.initial.visualizer_configuration,
       })
     }
 

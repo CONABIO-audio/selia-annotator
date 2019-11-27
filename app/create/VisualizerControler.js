@@ -37,10 +37,13 @@ class VisualizerControler extends React.Component {
       }
 
       this.setState({
-        selectedAnnotationType: typeInfo.name,
+        selectedAnnotationType: typeInfo.annotation_type,
         active: true,
       }, () => {
-        this.props.setAnnotationInfo({'annotationType': typeInfo.annotation_type})
+        this.props.setAnnotationInfo({
+          'annotationType': typeInfo.annotation_type,
+          'annotationTool': this.props.components.annotators[typeInfo.annotation_type].annotation_tool
+        })
         this.loadAnnotator()
       });
     }
@@ -65,12 +68,7 @@ class VisualizerControler extends React.Component {
         activator: () => this.activateVisualizer()
       });
 
-      this.props.setAnnotationInfo({annotationTool: {
-        name: this.visualizer.name,
-        version: this.visualizer.version,
-        description: this.visualizer.description,
-        configuration_schema: this.visualizer.configuration_schema,
-      }})
+      this.props.setAnnotationInfo({visualizer: this.props.components.visualizer_id})
       this.forceUpdate();
     }
 
@@ -81,12 +79,13 @@ class VisualizerControler extends React.Component {
 
     loadAnnotator() {
       let selected = this.state.selectedAnnotationType;
+
       if (selected && selected in this.props.components.annotators) {
         if (this.annotator) {
           this.annotator.unmount();
         }
 
-        let annotationComponent = this.props.components.annotators[selected]
+        let annotationComponent = this.props.components.annotators[selected].annotator
         this.annotator = new annotationComponent({
           canvas: this.annotatorCanvas,
           visualizer: this.visualizer,
@@ -99,7 +98,7 @@ class VisualizerControler extends React.Component {
     registerAnnotation(annotation) {
       this.props.setAnnotationInfo({
         annotation: annotation,
-        annotationConfiguration: this.visualizer.getConfig()
+        visualizerConfiguration: this.visualizer.getConfig()
       });
     }
 

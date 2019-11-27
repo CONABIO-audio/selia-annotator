@@ -18,9 +18,10 @@ class AnnotationList extends React.Component {
   }
 
   render() {
-    let annotationType = this.getAnnotationTypeInfo(this.state.selectedAnnotationType)
-    let annotationTypeName = annotationType == null ? null : annotationType.name;
-    let annotator = this.props.components.annotators[annotationTypeName] || null;
+    let annotator = null;
+    if (this.state.selectedAnnotationType in this.props.components.annotators) {
+      annotator = this.props.components.annotators[this.state.selectedAnnotationType].annotator
+    }
 
     return (
       <div className="container-fluid">

@@ -1,10 +1,11 @@
 from django.urls import path
-from selia_annotator.views import CollectionItemAnnotatorView
+from selia_annotator import views
 
 
 urlpatterns = [
     path(
         '',
-        CollectionItemAnnotatorView.as_view(),
+        views.CollectionItemAnnotatorView.as_view(),
         name='annotator_app'),
+    path('annotators/', views.get_annotator, name='get_annotator'),
 ]
