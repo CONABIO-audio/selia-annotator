@@ -24,7 +24,9 @@ class VisualizerControler extends React.Component {
     }
 
     loadVisualizer() {
-      let itemInfo = this.props.info.item;
+      let itemInfo = {
+        url: this.props.info.item.url + 'download',
+      };
 
       this.visualizer = new this.props.components.visualizer({
         canvas: this.visualizerCanvas,
@@ -51,7 +53,7 @@ class VisualizerControler extends React.Component {
     componentDidUpdate() {
       this.loadAnnotator();
     }
-    
+
     componentWillUnmount() {
       if (this.visualizer) {
         this.visualizer.unmount();
