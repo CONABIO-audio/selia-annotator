@@ -74,5 +74,8 @@ class CollectionItemAnnotatorView(TemplateView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['item'] = self.item
+        context['sampling_event_device'] = self.item.sampling_event_device
+        context['sampling_event'] = self.item.sampling_event_device.sampling_event
+        context['collection'] = self.item.sampling_event_device.sampling_event.collection
         context['urls'] = self.get_urls()
         return context
