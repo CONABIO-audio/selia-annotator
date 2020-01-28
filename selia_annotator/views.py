@@ -78,4 +78,5 @@ class CollectionItemAnnotatorView(TemplateView):
         context['sampling_event'] = self.item.sampling_event_device.sampling_event
         context['collection'] = self.item.sampling_event_device.sampling_event.collection
         context['urls'] = self.get_urls()
+        context["annotation_app_url"] = self.request.get_full_path
         return context
