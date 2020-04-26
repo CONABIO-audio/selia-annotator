@@ -20,6 +20,7 @@ setup(
     author_email='erobredo@conabio.gob.mx, smartinez@conabio.gob.mx',
     install_requires=[
         'irekua_database',
+        'irekua-models',
         'irekua_permissions',
         'irekua_rest_api',
         'irekua_autocomplete',
