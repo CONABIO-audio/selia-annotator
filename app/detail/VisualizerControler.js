@@ -59,7 +59,7 @@ class VisualizerControler extends React.Component {
       if (this.visualizer) {
         return (
           <div className="row">
-          {this.visualizer.renderToolbar()}
+            {this.visualizer.renderToolbar()}
           </div>
         );
       }
@@ -107,6 +107,8 @@ class VisualizerControler extends React.Component {
         edit: true,
         registerAnnotation: (annotation) => this.registerAnnotation(annotation),
       });
+
+      this.forceUpdate();
     }
 
     getAnnotationTypeInfo(annotation_type) {

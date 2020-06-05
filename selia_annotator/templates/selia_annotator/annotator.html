@@ -9,9 +9,22 @@
   {% include 'selia_annotator/navbar.html' %}
 {% endblock secondary-navbar %}
 
-
 {% block toolbar-title %}
   {{ item.collection }}: {% trans 'Item' %} {{ item.pk }}: {% trans 'Annotations: Add' %}
+{% endblock %}
+
+{% block toolbar-center %}
+<li class="nav-item">
+  <a class="nav-link {% if not prev_object %}disabled{% endif %}" href="{% if prev_object %}{% url 'selia-annotator:annotator' %}?pk={{prev_object.pk}}{% endif %}?">
+    <i class="fas fa-chevron-left"></i> {% trans 'Previous' %}
+  </a>
+</li>
+
+<li class="nav-item">
+  <a class="nav-link {% if not next_object %}disabled{% endif %}" href="{% if next_object %}{% url 'selia-annotator:annotator' %}?pk={{next_object.pk}}{% endif %}?">
+    {% trans 'Next' %} <i class="fas fa-chevron-right"></i>
+  </a>
+</li>
 {% endblock %}
 
 {% block toolbar-items %}

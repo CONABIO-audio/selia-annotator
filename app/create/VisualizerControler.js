@@ -123,8 +123,13 @@ class VisualizerControler extends React.Component {
     renderCanvas() {
       return (
         <div className="col">
-          <div className="row" style={{height: "30em", width: "100%", textAlign: 'center'}}>
+          <div className="row" style={{
+            height: "30em",
+            width: "100%",
+            textAlign: 'center'}}
+          >
             <canvas
+              id="visualizerCanvas"
               ref={(node) => {this.visualizerCanvas = node;}}
               style={{
                 display: 'block',
@@ -134,9 +139,11 @@ class VisualizerControler extends React.Component {
             </canvas>
             <canvas
               ref={(node) => {this.annotatorCanvas = node;}}
+              id="annotatorCanvas"
               style={{
                 display: 'block',
                 position: 'absolute',
+                zIndex: 99,
                 pointerEvents: this.state.active ? 'auto' : 'none',
               }}
             >
