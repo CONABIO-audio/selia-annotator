@@ -48,11 +48,7 @@
   let urls = {{% for key, url in urls.items %}
     {{ key }}: '{{ url }}',{% endfor %}
   }
-
-  let info = {
-    item: "{{ item.pk }}",
-    itemType: "{{ item.item_type.pk }}",
-  }
+  let item = "{{ item.pk }}";
 
   function getCookie(name) {
       var cookieValue = null;
@@ -83,7 +79,7 @@
   });
 
   ReactDOM.render(
-    React.createElement(Annotator, {urls: urls, info: info}, null),
+    React.createElement(Annotator, {urls: urls, item: item}, null),
     document.getElementById('annotator'));
 </script>
 {% endblock scripts-extra %}
