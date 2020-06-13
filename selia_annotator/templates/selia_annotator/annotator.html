@@ -10,21 +10,7 @@
 {% endblock secondary-navbar %}
 
 {% block toolbar-title %}
-  {{ item.collection }}: {% trans 'Item' %} {{ item.pk }}: {% trans 'Annotations: Add' %}
-{% endblock %}
-
-{% block toolbar-center %}
-<li class="nav-item">
-  <a class="nav-link {% if not prev_object %}disabled{% endif %}" href="{% if prev_object %}{% url 'selia-annotator:annotator' %}?pk={{prev_object.pk}}{% endif %}?">
-    <i class="fas fa-chevron-left"></i> {% trans 'Previous' %}
-  </a>
-</li>
-
-<li class="nav-item">
-  <a class="nav-link {% if not next_object %}disabled{% endif %}" href="{% if next_object %}{% url 'selia-annotator:annotator' %}?pk={{next_object.pk}}{% endif %}?">
-    {% trans 'Next' %} <i class="fas fa-chevron-right"></i>
-  </a>
-</li>
+  {{ item.collection }}: {% trans 'Annotations: Add' %}
 {% endblock %}
 
 {% block toolbar-items %}
@@ -38,48 +24,31 @@
 
 {% block scripts-extra %}
 {{ block.super }}
-<script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+<script type="text/javascript" src="{% static 'selia_annotator/getCSRFToken.js' %}"></script>
 <script type="text/javascript" src="{% static 'selia_annotator/annotator.js' %}"></script>
-
 <script type="text/javascript">
-  let Annotator = annotator.default;
+  const startApp = annotator.default;
 
-  let urls = {{% for key, url in urls.items %}
+  const urls = {{% for key, url in urls.items %}
     {{ key }}: '{{ url }}',{% endfor %}
   }
-  let item = "{{ item.pk }}";
+  const items = [{% for pk in items %}'{{ pk }}',{%endfor%}];
+  const item = '{{ item.pk }}';
+  const annotators = JSON.parse('{{ annotators | safe }}');
+  const visualizers = JSON.parse('{{ visualizers | safe }}');
+  const itemTypes = JSON.parse('{{ item_types | safe }}');
+  const annotationTypes = JSON.parse('{{ annotation_types | safe }}');
 
-  function getCookie(name) {
-      var cookieValue = null;
-      if (document.cookie && document.cookie !== '') {
-          var cookies = document.cookie.split(';');
-          for (var i = 0; i < cookies.length; i++) {
-              var cookie = cookies[i].trim();
-              // Does this cookie string begin with the name we want?
-              if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                  break;
-              }
-          }
-      }
-      return cookieValue;
-  }
-  var csrftoken = getCookie('csrftoken');
+  const props = {
+    urls,
+    items,
+    item,
+    itemTypes,
+    annotationTypes,
+    annotators,
+    visualizers,
+  };
 
-  function csrfSafeMethod(method) {
-    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-  }
-  $.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFTOKEN", csrftoken);
-        }
-    }
-  });
-
-  ReactDOM.render(
-    React.createElement(Annotator, {urls: urls, item: item}, null),
-    document.getElementById('annotator'));
+  startApp('annotator', props);
 </script>
 {% endblock scripts-extra %}

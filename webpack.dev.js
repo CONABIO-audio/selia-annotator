@@ -9,7 +9,7 @@ const TARGET_DIR = path.join(
 
 module.exports = {
   mode: 'development',
-  entry: path.join(__dirname, '/app/index.jsx'),
+  entry: path.join(__dirname, '/app/index.js'),
   output: {
     filename: 'annotator.js',
     path: TARGET_DIR,
