@@ -1,5 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import APIContext from '../contexts/APIContext';
+import TypesContext from '../contexts/TypesContext';
 import AnnotationsContext from '../contexts/AnnotationsContext';
 import { STATES } from './utils';
 
@@ -10,6 +11,9 @@ function validateAnnotation(annotation) {
 
 
 function AnnotatorContainer({ children }) {
+  const API = useContext(APIContext);
+  const { annotators, annotationTypes } = useContext(TypesContext);
+
   const [annotatorState, setAnnotatorState] = useState(STATES.SELECT);
   const [selectedAnnotation, setSelectedAnnotation] = useState(null);
   const [hoverAnnotation, setHoverAnnotation] = useState(null);
@@ -24,7 +28,14 @@ function AnnotatorContainer({ children }) {
   const [commentaries, setCommentaries] = useState(null);
   const [visualizerConfiguration, setVisualizerConfiguration] = useState(null);
 
-  const API = useContext(APIContext);
+  useEffect(() => {
+    const keys = Object.keys(annotationTypes);
+    if (keys.length > 0) {
+      const [firstAnnotationType] = keys;
+      setAnnotationType(firstAnnotationType);
+      setAnnotator(annotators[firstAnnotationType].id.toString());
+    }
+  }, [annotators, annotationTypes]);
 
   function buildAnnotation() {
     return {

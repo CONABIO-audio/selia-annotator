@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import APIContext from '../contexts/APIContext';
 
 
 const API_FETCH_DELAY = 1000;
@@ -47,7 +48,29 @@ function useAPIRequest(url) {
 }
 
 
+function useAnnotations() {
+  // Prepare annotations
+  const { annotations } = useContext(APIContext);
+
+  const itemAnnotations = {};
+  if (!annotations.loading && annotations.error === null) {
+    Object.entries(annotations.data).forEach(([id, annotation]) => {
+      itemAnnotations[id] = annotation.annotation;
+    });
+  }
+
+  return itemAnnotations;
+}
+
+
+function hasAttr(obj, attr) {
+  return Object.hasOwnProperty.call(obj, attr);
+}
+
+
 export {
+  hasAttr,
   useAPIRequest,
+  useAnnotations,
   STATES,
 };

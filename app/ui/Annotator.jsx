@@ -15,17 +15,14 @@ function Annotator({ itemSelector }) {
   return (
     <AnnotatorContainer>
       <Container fluid>
-        <Row className="justify-content-center">
-          {itemSelector}
-        </Row>
         <Row className="border border-dark">
-          <ToolbarContainer />
+          <ToolbarContainer itemSelector={itemSelector} />
         </Row>
         <Row>
-          <Col className="border border-dark">
+          <Col xl={8} lg={7} md={6} className="border border-dark">
             <CanvasContainer />
           </Col>
-          <Col className="border border-dark">
+          <Col xl={4} lg={5} md={6} className="border border-dark">
             <SidebarContainer />
           </Col>
         </Row>

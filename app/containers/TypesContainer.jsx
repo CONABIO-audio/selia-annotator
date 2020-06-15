@@ -1,5 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import TypesContext from '../contexts/TypesContext';
+
+// 
+// function useVisualizers(visualizers) {
+//   return null;
+// }
+//
+// function useAnnotationTools(annotators) {
+//   return null;
+// }
 
 
 function TypesContainer(props) {
@@ -29,6 +38,7 @@ function TypesContainer(props) {
   annotationTypes.forEach((annotationTypeInfo) => {
     annotationTypesInfo[annotationTypeInfo.id] = annotationTypeInfo;
   });
+
 
   const value = {
     items,

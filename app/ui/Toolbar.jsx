@@ -1,15 +1,25 @@
 import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Col from 'react-bootstrap/Col';
-import AnnotationToolMenu from './AnnotationToolMenu';
+import Row from 'react-bootstrap/Row';
+import AnnotationToolMenuContainer from '../containers/AnnotationToolMenuContainer';
+import EventTypeMenuContainer from '../containers/EventTypeMenuContainer';
 
 
-function Toolbar(props) {
+function Toolbar({ itemSelector }) {
   return (
     <Container fluid>
-      <Col>
-        <AnnotationToolMenu />
-      </Col>
+      <Row>
+        <Col>
+          <AnnotationToolMenuContainer />
+        </Col>
+        <Col>
+          {itemSelector}
+        </Col>
+        <Col>
+          <EventTypeMenuContainer />
+        </Col>
+      </Row>
     </Container>
   );
 }

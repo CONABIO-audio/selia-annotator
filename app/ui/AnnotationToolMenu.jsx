@@ -1,34 +1,33 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import Container from 'react-bootstrap/Container';
 
-import TypesContext from '../contexts/TypesContext';
-import AnnotationsContext from '../contexts/AnnotationsContext';
+
 import AnnotationTypeButton from '../components/AnnotationTypeButton';
 
 
 function AnnotationToolMenu(props) {
-  const { annotators, annotationTypes } = useContext(TypesContext);
-  const { annotator, annotationType } = useContext(AnnotationsContext);
+  const {
+    annotationTypes,
+    annotators,
+    selected,
+    select,
+  } = props;
 
-  const buttons = (
-    Object.entries(annotators)
-      .map(([id, otherAnnotator]) => {
-        const otherAnnotationType = annotationTypes[id];
+  const buttons = Object.entries(annotationTypes)
+    .map(([id, type]) => (
+      <AnnotationTypeButton
+        key={id}
+        annotationType={type}
+        active={id === selected}
+        onClick={() => select(id)}
+      />
+    ));
 
-        return (
-          <AnnotationTypeButton
-            key={id}
-            annotationType={otherAnnotationType}
-            active={id === annotator.value}
-            onClick={() => {
-              annotator.set(otherAnnotator.id.toString());
-              annotationType.set(id);
-            }}
-          />
-        );
-      })
+  return (
+    <Container fluid className="p-2 h-100 border border-dark">
+      {buttons}
+    </Container>
   );
-
-  return <div>{buttons}</div>;
 }
 
 

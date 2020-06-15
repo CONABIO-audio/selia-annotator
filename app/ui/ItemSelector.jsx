@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
-import Button from 'react-bootstrap/Button';
-import Row from 'react-bootstrap/Row';
+import Container from 'react-bootstrap/Container';
 
+import { LeftButton, RightButton } from '../components/Buttons';
 import { updateURLParameter } from './utils';
 
 
@@ -29,24 +27,20 @@ function ItemSelector({ item, items, setItem }) {
   }, [item]);
 
   return (
-    <Row>
-      <Button
+    <Container fluid className="border border-dark p-2 h-100">
+      <LeftButton
         className="mx-1"
         variant={index === 0 ? 'active' : 'light'}
         disabled={index === 0}
         onClick={() => setItem(items[index - 1])}
-      >
-        <FontAwesomeIcon icon={faAngleLeft} />
-      </Button>
-      <Button
+      />
+      <RightButton
         className="mx-1"
         variant={index === length ? 'active' : 'light'}
         disabled={index === length}
         onClick={() => setItem(items[index + 1])}
-      >
-        <FontAwesomeIcon icon={faAngleRight} />
-      </Button>
-    </Row>
+      />
+    </Container>
   );
 }
 

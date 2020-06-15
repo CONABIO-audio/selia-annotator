@@ -4,16 +4,12 @@ import Canvas from '../ui/Canvas';
 import TypesContext from '../contexts/TypesContext';
 import APIContext from '../contexts/APIContext';
 import AnnotationsContext from '../contexts/AnnotationsContext';
+import { hasAttr, useAnnotations } from './utils';
 
 
-function hasAttr(obj, attr) {
-  return Object.hasOwnProperty.call(obj, attr);
-}
-
-
-function getCurrentVisualizerInfo(api, types) {
-  if (api.itemInfo.data) {
-    const type = api.itemInfo.data.item_type.id;
+function getCurrentVisualizerInfo(itemInfo, types) {
+  if (itemInfo.data) {
+    const type = itemInfo.data.item_type.id;
     return types.visualizers[type];
   }
   return null;
@@ -112,27 +108,32 @@ function useAnnotator(componentInfo) {
 
 
 function CanvasContainer(props) {
-  const apiContext = useContext(APIContext);
+  const { itemInfo } = useContext(APIContext);
   const typesContext = useContext(TypesContext);
   const annotationsContext = useContext(AnnotationsContext);
 
   // Load visualizer
-  const visualizerInfo = getCurrentVisualizerInfo(apiContext, typesContext);
+  const visualizerInfo = getCurrentVisualizerInfo(itemInfo, typesContext);
   const visualizer = useVisualizer(visualizerInfo);
 
   // Load annotator
   const annotatorInfo = getCurrentAnnotatorInfo(annotationsContext, typesContext);
   const annotator = useAnnotator(annotatorInfo);
 
-  const url = apiContext.itemInfo.data === null
+  // Get item url
+  const url = itemInfo.data === null
     ? null
-    : apiContext.itemInfo.data.download;
+    : itemInfo.data.download;
+
+  // Prepare annotations
+  const itemAnnotations = useAnnotations();
 
   return (
     <Canvas
       url={url}
       visualizer={visualizer}
       annotator={annotator}
+      annotations={itemAnnotations}
     />
   );
 }
