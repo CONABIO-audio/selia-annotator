@@ -14,6 +14,7 @@ function AnnotatorContainer({ children }) {
   const API = useContext(APIContext);
   const { annotators, annotationTypes } = useContext(TypesContext);
 
+  const [item, setItem] = useState(null);
   const [annotatorState, setAnnotatorState] = useState(STATES.SELECT);
   const [selectedAnnotation, setSelectedAnnotation] = useState(null);
   const [hoverAnnotation, setHoverAnnotation] = useState(null);
@@ -28,6 +29,7 @@ function AnnotatorContainer({ children }) {
   const [commentaries, setCommentaries] = useState(null);
   const [visualizerConfiguration, setVisualizerConfiguration] = useState(null);
 
+  // Select the first annotation type by default
   useEffect(() => {
     const keys = Object.keys(annotationTypes);
     if (keys.length > 0) {
@@ -36,6 +38,25 @@ function AnnotatorContainer({ children }) {
       setAnnotator(annotators[firstAnnotationType].id.toString());
     }
   }, [annotators, annotationTypes]);
+
+  // Reset state on change of item
+  useEffect(() => {
+    console.log('change item');
+    setItem(API.item);
+    setAnnotatorState(STATES.SELECT);
+    setSelectedAnnotation(null);
+    setHoverAnnotation(null);
+  }, [API.item]);
+
+  // Reset annotation fields on change of selected annotation.
+  useEffect(() => {
+    setAnnotation(null);
+    setLabels(null);
+    setCertainty(null);
+    setQuality(null);
+    setCommentaries(null);
+    setVisualizerConfiguration(null);
+  }, [selectedAnnotation]);
 
   function buildAnnotation() {
     return {
@@ -52,21 +73,17 @@ function AnnotatorContainer({ children }) {
   }
 
   function createAnnotation() {
-    if (annotatorState !== STATES.CREATE) throw Error('The app is not in an create state.');
-
     const newAnnotation = buildAnnotation();
     const [isValid, errors] = validateAnnotation(newAnnotation);
 
     if (!isValid) return [isValid, errors];
 
     const response = API.createAnnotation(annotation);
+
     return [isValid, response];
   }
 
   function updateAnnotation() {
-    if (annotatorState !== STATES.EDIT) throw Error('The app is not in an edit state.');
-    if (selectedAnnotation === null) throw Error('No selected annotation to update');
-
     const newAnnotation = buildAnnotation();
     const [isValid, errors] = validateAnnotation(newAnnotation);
 
@@ -77,13 +94,14 @@ function AnnotatorContainer({ children }) {
   }
 
   function deleteAnnotation() {
-    if (annotatorState !== STATES.CREATE) throw Error('The app is not in an delete state.');
-    if (selectedAnnotation === null) throw Error('No selected annotation to delete');
-
     return API.deleteAnnotation(selectedAnnotation, annotation);
   }
 
   const value = {
+    item: {
+      value: item,
+      set: setItem,
+    },
     state: {
       value: annotatorState,
       set: setAnnotatorState,

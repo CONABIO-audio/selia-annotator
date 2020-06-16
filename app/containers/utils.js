@@ -51,13 +51,17 @@ function useAPIRequest(url) {
 function useAnnotations() {
   // Prepare annotations
   const { annotations } = useContext(APIContext);
+  const [itemAnnotations, setItemAnnotations] = useState({});
 
-  const itemAnnotations = {};
-  if (!annotations.loading && annotations.error === null) {
-    Object.entries(annotations.data).forEach(([id, annotation]) => {
-      itemAnnotations[id] = annotation.annotation;
-    });
-  }
+  useEffect(() => {
+    if (!annotations.loading && annotations.error === null) {
+      const newItemAnnotations = {};
+      Object.entries(annotations.data).forEach(([id, annotation]) => {
+        newItemAnnotations[id] = annotation.annotation;
+      });
+      setItemAnnotations(newItemAnnotations);
+    }
+  }, [annotations]);
 
   return itemAnnotations;
 }

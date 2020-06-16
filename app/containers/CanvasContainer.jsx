@@ -29,16 +29,18 @@ function useVisualizer(componentInfo) {
   const [store, setStore] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [id, setId] = useState(null);
   const [component, setComponent] = useState(null);
 
   useEffect(() => {
     if (componentInfo !== null) {
-      const { id } = componentInfo;
+      const { id: visId } = componentInfo;
 
-      if (!hasAttr(store, id)) {
+      if (!hasAttr(store, visId)) {
         setLoading(true);
         setError(null);
         setComponent(null);
+        setId(null);
 
         import(/* webpackIgnore: true */componentInfo.module)
           .then((module) => {
@@ -46,8 +48,9 @@ function useVisualizer(componentInfo) {
               return new Visualizer.default(props);
             }
 
-            setStore((prevStore) => ({ ...prevStore, [id]: () => getCurrentComponent }));
+            setStore((prevStore) => ({ ...prevStore, [visId]: () => getCurrentComponent }));
             setComponent(() => getCurrentComponent);
+            setId(visId);
             setLoading(false);
           })
           .catch((e) => {
@@ -57,12 +60,13 @@ function useVisualizer(componentInfo) {
       } else {
         setLoading(false);
         setError(null);
-        setComponent(store[id]);
+        setId(visId);
+        setComponent(store[visId]);
       }
     }
   }, [componentInfo, store]);
 
-  return { loading, error, component };
+  return { loading, error, component, id };
 }
 
 
@@ -70,16 +74,18 @@ function useAnnotator(componentInfo) {
   const [store, setStore] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [id, setId] = useState(null);
   const [component, setComponent] = useState(null);
 
   useEffect(() => {
     if (componentInfo !== null) {
-      const { id } = componentInfo;
+      const { id: annId } = componentInfo;
 
-      if (!hasAttr(store, id)) {
+      if (!hasAttr(store, annId)) {
         setLoading(true);
         setError(null);
         setComponent(null);
+        setId(null);
 
         import(/* webpackIgnore: true */componentInfo.module)
           .then((module) => {
@@ -87,9 +93,10 @@ function useAnnotator(componentInfo) {
               return new AnnotatorTool.default(props);
             }
 
-            setStore((prevStore) => ({ ...prevStore, [id]: () => getCurrentComponent }));
+            setStore((prevStore) => ({ ...prevStore, [annId]: () => getCurrentComponent }));
             setComponent(() => getCurrentComponent);
             setLoading(false);
+            setId(annId);
           })
           .catch((e) => {
             setLoading(false);
@@ -98,12 +105,13 @@ function useAnnotator(componentInfo) {
       } else {
         setLoading(false);
         setError(null);
-        setComponent(store[id]);
+        setId(annId);
+        setComponent(store[annId]);
       }
     }
   }, [componentInfo, store]);
 
-  return { loading, error, component };
+  return { loading, error, component, id };
 }
 
 
@@ -134,6 +142,15 @@ function CanvasContainer(props) {
       visualizer={visualizer}
       annotator={annotator}
       annotations={itemAnnotations}
+      item={annotationsContext.item.value}
+      setState={annotationsContext.state.set}
+      state={annotationsContext.state.value}
+      selectedAnnotation={annotationsContext.selectedAnnotation.value}
+      setSelectedAnnotation={annotationsContext.selectedAnnotation.set}
+      hoverAnnotation={annotationsContext.hoverAnnotation.value}
+      setHoverAnnotation={annotationsContext.hoverAnnotation.set}
+      setAnnotation={annotationsContext.annotation.set}
+      deleteAnnotation={annotationsContext.deleteAnnotation}
     />
   );
 }
