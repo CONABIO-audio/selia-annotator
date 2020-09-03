@@ -31,6 +31,7 @@ function AnnotatorContainer({ children }) {
 
   // Select the first annotation type by default
   useEffect(() => {
+    console.log('Changing item');
     const keys = Object.keys(annotationTypes);
     if (keys.length > 0) {
       const [firstAnnotationType] = keys;
@@ -41,7 +42,6 @@ function AnnotatorContainer({ children }) {
 
   // Reset state on change of item
   useEffect(() => {
-    console.log('change item');
     setItem(API.item);
     setAnnotatorState(STATES.SELECT);
     setSelectedAnnotation(null);

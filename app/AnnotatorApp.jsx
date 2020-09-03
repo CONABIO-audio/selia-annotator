@@ -21,21 +21,21 @@ function AnnotatorApp(props) {
   const [currentItem, setCurrentItem] = useState(item);
 
   return (
-    <TypesContainer
-      items={items}
-      itemTypes={itemTypes}
-      annotationTypes={annotationTypes}
-      annotators={annotators}
-      visualizers={visualizers}
-    >
-      <APIContainer item={currentItem} urls={urls}>
+    <APIContainer item={currentItem} urls={urls}>
+      <TypesContainer
+        items={items}
+        itemTypes={itemTypes}
+        annotationTypes={annotationTypes}
+        annotators={annotators}
+        visualizers={visualizers}
+      >
         <Annotator
           itemSelector={
             <ItemSelector item={currentItem} items={items} setItem={setCurrentItem} />
           }
         />
-      </APIContainer>
-    </TypesContainer>
+      </TypesContainer>
+    </APIContainer>
   );
 }
 

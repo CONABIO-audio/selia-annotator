@@ -27,9 +27,11 @@ function useAnnotations(item, urls) {
 
 function APIContainer(props) {
   const { item, urls, children } = props;
+
   const itemUrl = urls.item.replace('item_pk', item);
   const itemInfo = useAPIRequest(itemUrl);
   const annotations = useAnnotations(item, urls);
+
   return (
     <APIContext.Provider value={{ item, itemInfo, annotations }}>
       {children}

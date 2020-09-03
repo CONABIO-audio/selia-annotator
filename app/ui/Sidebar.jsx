@@ -7,9 +7,15 @@ import AnnotationListContainer from '../containers/AnnotationListContainer';
 function Sidebar(props) {
   const api = useContext(APIContext);
 
+  const { selectedAnnotation, hoverAnnotation } = props;
+
   return (
     <Container>
-      <AnnotationListContainer annotations={api.annotations} />
+      <AnnotationListContainer
+        annotations={api.annotations}
+        selectedAnnotation={selectedAnnotation}
+        hoverAnnotation={hoverAnnotation}
+      />
     </Container>
   );
 }

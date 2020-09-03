@@ -5,7 +5,7 @@ import AnnotationListItem from '../components/AnnotationListItem';
 
 
 function AnnotationList(props) {
-  const { annotations, loading, types } = props;
+  const { annotations, loading, types, selectedAnnotation, hoverAnnotation } = props;
 
   if (loading) {
     return (
@@ -18,7 +18,19 @@ function AnnotationList(props) {
   return (
     <List>
       {Object.entries(annotations).map(([id, annotation]) => (
-        <AnnotationListItem key={id} annotation={annotation} types={types} />
+        <AnnotationListItem
+          key={id}
+          annotation={annotation}
+          types={types}
+          selected={id === selectedAnnotation.value}
+          hover={id === hoverAnnotation.value}
+          onMouseEnter={() => {
+            if (id !== hoverAnnotation) {
+              hoverAnnotation.set(id);
+            }
+          }}
+          onMouseLeave={() => hoverAnnotation.set(null)}
+        />
       ))}
     </List>
   );

@@ -51,9 +51,15 @@ function AnnotationItem({ annotation, types: { annotations, events } }) {
 }
 
 
-function AnnotationListItem({ annotation, types }) {
+function AnnotationListItem({ annotation, types, selected, hover, onMouseEnter, onMouseLeave }) {
   return (
-    <ListItem item={annotation}>
+    <ListItem
+      item={annotation}
+      selected={selected}
+      hover={hover}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       <AnnotationItem annotation={annotation} types={types} />
     </ListItem>
   );

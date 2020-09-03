@@ -6,6 +6,7 @@ import AnnotationList from '../ui/AnnotationList';
 
 function AnnotationListContainer(props) {
   // Prepare annotations
+  const { selectedAnnotation, hoverAnnotation } = props;
   const { annotations } = useContext(APIContext);
   const { annotationTypes, eventTypes } = useContext(TypesContext);
 
@@ -17,6 +18,8 @@ function AnnotationListContainer(props) {
         annotations: annotationTypes,
         events: eventTypes,
       }}
+      selectedAnnotation={selectedAnnotation}
+      hoverAnnotation={hoverAnnotation}
     />
   );
 }

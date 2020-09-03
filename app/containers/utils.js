@@ -19,28 +19,25 @@ function useAPIRequest(url) {
   const [failed, setFailed] = useState(false);
   const [tries, setTries] = useState(0);
 
-  function fetchData() {
-    fetch(url)
-      .then((result) => result.json())
-      .then((d) => {
-        setData(d);
-        setLoading(false);
-      })
-      .catch((e) => {
-        setError(e.message);
-        setTimeout(() => setTries(tries + 1), API_FETCH_DELAY);
-      });
-  }
-
   useEffect(() => {
     if (tries < MAX_API_FETCH_TRIES) {
-      fetchData();
+      setLoading(true);
+      fetch(url)
+        .then((result) => result.json())
+        .then((d) => {
+          setData(d);
+          console.log({
+            message: 'Fetching from API',
+            url,
+          });
+          setLoading(false);
+        })
+        .catch((e) => {
+          setError(e.message);
+          setTimeout(() => setTries(tries + 1), API_FETCH_DELAY);
+        });
     } else {
       setFailed(true);
-    }
-
-    return () => {
-      setLoading(true);
     }
   }, [tries, url]);
 
@@ -54,14 +51,15 @@ function useAnnotations() {
   const [itemAnnotations, setItemAnnotations] = useState({});
 
   useEffect(() => {
-    if (!annotations.loading && annotations.error === null) {
+    if (annotations.data !== null) {
+      console.log('changing annotations!!');
       const newItemAnnotations = {};
       Object.entries(annotations.data).forEach(([id, annotation]) => {
         newItemAnnotations[id] = annotation.annotation;
       });
       setItemAnnotations(newItemAnnotations);
     }
-  }, [annotations]);
+  }, [annotations.data]);
 
   return itemAnnotations;
 }
