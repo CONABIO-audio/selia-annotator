@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^api/', include('irekua_rest_api.urls')),
     url(r'^autocomplete/', include(('irekua_autocomplete.urls', 'irekua_autocomplete'))),
     url(r'^visualizers/', include(('selia_visualizers.urls', 'selia_visualizers'))),
+    url(r'^registration/', include('selia_registration.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

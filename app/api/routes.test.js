@@ -1,30 +1,28 @@
-import APIConfig from './config';
-import { objects, actions, methods } from './constants';
+import APIRoutes from './routes';
+import { Objects, Actions, HttpMethods } from './constants';
 
+test('Get correct default HttpMethods', () => {
+    const routes = new APIRoutes();
 
-test('Get correct default methods', () => {
-  const config = new APIConfig();
-
-  expect(config.getMethod(objects.ITEMS, actions.DETAIL)).toBe(methods.GET);
-  expect(config.getMethod(objects.ITEMS, actions.SET_EVENT_READY)).toBe(methods.PUT);
-  expect(config.getMethod(objects.ANNOTATIONS, actions.LIST)).toBe(methods.GET);
-  expect(config.getMethod(objects.ANNOTATIONS, actions.CREATE)).toBe(methods.POST);
-  expect(config.getMethod(objects.ANNOTATIONS, actions.UPDATE)).toBe(methods.PUT);
-  expect(config.getMethod(objects.ANNOTATIONS, actions.DETAIL)).toBe(methods.GET);
-  expect(config.getMethod(objects.ANNOTATIONS, actions.DELETE)).toBe(methods.DELETE);
-  expect(config.getMethod(objects.PREDICTIONS, actions.LIST)).toBe(methods.GET);
+    expect(routes.getMethod(Objects.Items, Actions.Detail)).toBe(HttpMethods.GET);
+    expect(routes.getMethod(Objects.Items, Actions.SetEventReady)).toBe(HttpMethods.PUT);
+    expect(routes.getMethod(Objects.Annotations, Actions.List)).toBe(HttpMethods.GET);
+    expect(routes.getMethod(Objects.Annotations, Actions.Create)).toBe(HttpMethods.POST);
+    expect(routes.getMethod(Objects.Annotations, Actions.Update)).toBe(HttpMethods.PUT);
+    expect(routes.getMethod(Objects.Annotations, Actions.Detail)).toBe(HttpMethods.GET);
+    expect(routes.getMethod(Objects.Annotations, Actions.Delete)).toBe(HttpMethods.DELETE);
+    expect(routes.getMethod(Objects.Predictions, Actions.List)).toBe(HttpMethods.GET);
 });
 
-
 test('Get correct default urls', () => {
-  const config = new APIConfig({ prefix: '' });
+    const routes = new APIRoutes({ prefix: '' });
 
-  expect(config.getUrl(objects.ITEMS, actions.DETAIL)).toBe('items/<pk>/');
-  expect(config.getUrl(objects.ITEMS, actions.SET_EVENT_READY)).toBe('items/<pk>/');
-  expect(config.getUrl(objects.ANNOTATIONS, actions.LIST)).toBe('annotations/');
-  expect(config.getUrl(objects.ANNOTATIONS, actions.CREATE)).toBe('annotations/');
-  expect(config.getUrl(objects.ANNOTATIONS, actions.UPDATE)).toBe('annotations/<pk>/');
-  expect(config.getUrl(objects.ANNOTATIONS, actions.DETAIL)).toBe('annotations/<pk>/');
-  expect(config.getUrl(objects.ANNOTATIONS, actions.DELETE)).toBe('annotations/<pk>/');
-  expect(config.getUrl(objects.PREDICTIONS, actions.LIST)).toBe('predictions/');
+    expect(routes.getUrl(Objects.Items, Actions.Detail)).toBe('items/<pk>/');
+    expect(routes.getUrl(Objects.Items, Actions.SetEventReady)).toBe('items/<pk>/');
+    expect(routes.getUrl(Objects.Annotations, Actions.List)).toBe('annotations/');
+    expect(routes.getUrl(Objects.Annotations, Actions.Create)).toBe('annotations/');
+    expect(routes.getUrl(Objects.Annotations, Actions.Update)).toBe('annotations/<pk>/');
+    expect(routes.getUrl(Objects.Annotations, Actions.Detail)).toBe('annotations/<pk>/');
+    expect(routes.getUrl(Objects.Annotations, Actions.Delete)).toBe('annotations/<pk>/');
+    expect(routes.getUrl(Objects.Predictions, Actions.List)).toBe('predictions/');
 });

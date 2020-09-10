@@ -7,6 +7,7 @@ from irekua_models.settings import *
 from irekua_rest_api.settings import *
 from irekua_autocomplete.settings import *
 from selia_templates.settings import *
+from selia_registration.settings import *
 from selia_visualizers.settings import *
 from selia_annotator.settings import *
 
@@ -19,6 +20,7 @@ LOCALE_PATHS = [os.path.join(BASE_DIR, 'locale'), ]
 INSTALLED_APPS = list(OrderedDict.fromkeys(
     SELIA_ANNOTATOR_APPS +
     SELIA_VISUALIZERS_APPS +
+    SELIA_REGISTRATION_APPS +
     SELIA_TEMPLATES_APPS +
     IREKUA_REST_API_APPS +
     IREKUA_AUTOCOMPLETE_APPS +
