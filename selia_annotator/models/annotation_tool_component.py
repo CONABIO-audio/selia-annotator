@@ -2,8 +2,7 @@ import os
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
-from irekua_database.models import AnnotationTool
+from selia_annotator.models.annotation_tool import AnnotationTool
 
 
 def annotator_path(instance, filename):

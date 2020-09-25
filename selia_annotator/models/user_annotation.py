@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 from irekua_database.utils import empty_JSON
 from irekua_database.models import Visualizer
 from irekua_database.models import Annotation
-from irekua_database.models import AnnotationTool
+from selia_annotator.models.annotation_tool import AnnotationTool
 
 
 class UserAnnotation(Annotation):
