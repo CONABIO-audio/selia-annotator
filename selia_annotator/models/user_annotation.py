@@ -3,8 +3,8 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
-from irekua_database.models import Visualizer
 from irekua_database.models import Annotation
+from selia_visualizers.models import Visualizer
 from selia_annotator.models.annotation_tool import AnnotationTool
 
 
@@ -74,11 +74,11 @@ class UserAnnotation(Annotation):
 
     def __str__(self):
         msg = _('User Annotation of item %(item_id)s')
-        params = dict(item_id=self.annotation.item)
+        params = dict(item_id=self.item)
         return msg % params
 
     def clean(self):
-        if self.annotation.annotation_type != self.annotation_tool.annotation_type:
+        if self.annotation_type != self.annotation_tool.annotation_type:
             msg = _('Invalid annotation tool for this annotation type')
             raise ValidationError({'annotation_tool': msg})
 
