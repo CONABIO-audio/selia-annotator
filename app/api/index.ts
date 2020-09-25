@@ -1,8 +1,12 @@
 import _ from 'lodash';
 import $ from 'jquery';
+import fetch from 'unfetch';
+
 import APIRoutes, { APIConfig } from './routes';
-import { Objects, Actions, HttpMethods } from './constants';
-import { Item, Annotation } from '../types';
+import { Objects, Actions, HTTPMethods } from './constants';
+import { Item } from './items/types';
+import { Annotation, AnnotationTool } from './annotations/types';
+import { AnnotationData } from './creationTypes';
 
 const PK_SUB = '<pk>';
 
@@ -29,7 +33,6 @@ class APIClient {
         query: any = {},
         data: any = {},
     ): Promise<APIResponse<any>> {
-        // Validation
         if (!_.isPlainObject(query)) {
             throw TypeError('Query in API fetch is not a plain object.');
         }
@@ -53,7 +56,7 @@ class APIClient {
 
         const method = this.routes.getMethod(object, action);
         const options: { [propName: string]: any } = { method };
-        if (body !== '' && method !== HttpMethods.GET) {
+        if (body !== '' && method !== HTTPMethods.GET) {
             options['body'] = body;
         }
 
@@ -79,8 +82,15 @@ class APIClient {
         return this.fetch(Objects.Annotations, Actions.List, null, { item: itemId });
     }
 
+    /** Load annotation tools for a type of annotation */
+    async getAnnotationTools(annotationType: number): Promise<APIResponse<Array<AnnotationTool>>> {
+        return this.fetch(Objects.AnnotationTools, Actions.List, null, { annotation_type: annotationType });
+    }
+
     /** Register a new annotation to the database */
-    createAnnotation(itemId: number, annotationData: any) {}
+    createAnnotation(itemId: number, annotationData: AnnotationData): Promise<any> {
+        return this.fetch(Objects.Annotations, Actions.Create, itemId, annotationData);
+    }
 
     /** Delete an annotation */
     deleteAnnotation(annotationId: number) {}

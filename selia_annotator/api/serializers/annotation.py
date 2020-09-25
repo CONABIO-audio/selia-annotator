@@ -3,32 +3,10 @@ from rest_framework import serializers
 from irekua_database.models import Annotation
 from irekua_database.models import AnnotationType
 from irekua_database.models import AnnotationTool
-from irekua_database.models import Visualizer
+from selia_annotator.models import AnnotationToolComponent
 from selia_annotator.api.serializers.users import UserSerializer
 from selia_annotator.api.serializers.terms import TermSerializer
-
-
-
-
-
-class VisualizerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Visualizer
-        fields = [
-            'id',
-            'name',
-            'version',
-        ]
-
-
-class AnnotationToolSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = AnnotationTool
-        fields = [
-            'id',
-            'name',
-            'version',
-        ]
+from selia_annotator.api.serializers.visualizers import VisualizerSerializer
 
 
 class AnnotationTypeSerializer(serializers.ModelSerializer):
@@ -43,12 +21,38 @@ class AnnotationTypeSerializer(serializers.ModelSerializer):
         ]
 
 
+class AnnotationToolSerializer(serializers.ModelSerializer):
+    annotation_type = AnnotationTypeSerializer(many=False, read_only=True)
+
+    class Meta:
+        model = AnnotationTool
+        fields = [
+            'id',
+            'annotation_type',
+            'name',
+            'version',
+            'logo',
+            'website',
+        ]
+
+
+class AnnotationToolComponentSerializer(serializers.ModelSerializer):
+    annotation_tool = AnnotationToolSerializer(read_only=True)
+
+    class Meta:
+        model = AnnotationToolComponent
+        fields = [
+            'id',
+            'is_active',
+            'annotation_tool',
+            'javascript_file',
+        ]
+
+
 class AnnotationSerializer(serializers.ModelSerializer):
     created_by = UserSerializer(read_only=True)
     modified_by = UserSerializer(read_only=True)
     labels = TermSerializer(many=True, read_only=True)
-    visualizer = VisualizerSerializer(read_only=True)
-    annotation_tool = AnnotationToolSerializer(read_only=True)
 
     class Meta:
         model = Annotation
@@ -69,4 +73,22 @@ class AnnotationSerializer(serializers.ModelSerializer):
             'created_on',
             'modified_by',
             'modified_on',
+        ]
+
+
+class CreateAnnotationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Annotation
+        fields = [
+            'item',
+            'annotation_type',
+            'event_type',
+            'annotation',
+            'labels',
+            'annotation_tool',
+            'visualizer',
+            'visualizer_configuration',
+            'certainty',
+            'quality',
+            'commentaries',
         ]

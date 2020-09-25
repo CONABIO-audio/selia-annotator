@@ -4,10 +4,12 @@ from irekua_database.models import Item
 from irekua_database.models import Licence
 from irekua_database.models import LicenceType
 from irekua_database.models import ItemType
+from selia_visualizers.models import VisualizerComponentItemType
 
 from selia_annotator.api.serializers.users import UserSerializer
 from selia_annotator.api.serializers.data_collection import CollectionSerializer
 from selia_annotator.api.serializers.event_type import EventTypeSerializer
+from selia_annotator.api.serializers.visualizers import VisualizerComponentItemTypeSerializer
 
 
 class LicenceTypeSerializer(serializers.ModelSerializer):
@@ -64,6 +66,7 @@ class ItemSerializer(serializers.ModelSerializer):
         many=False,
         read_only=True,
         source='sampling_event_device.sampling_event.collection')
+    visualizer = serializers.SerializerMethodField()
 
     class Meta:
         model = Item
@@ -79,7 +82,20 @@ class ItemSerializer(serializers.ModelSerializer):
             'ready_event_types',
             'collection',
             'created_by',
+            'visualizer',
             'modified_by',
             'created_on',
             'modified_on',
         ]
+
+    def get_visualizer(self, obj):
+        try:
+            visualizer = VisualizerComponentItemType.objects.get(
+                is_active=True,
+                item_type=obj.item_type)
+            serializer = VisualizerComponentItemTypeSerializer(
+                visualizer,
+                read_only=True)
+            return serializer.data
+        except VisualizerComponentItemType.DoesNotExist:
+            return {}

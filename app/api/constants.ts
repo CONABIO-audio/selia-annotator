@@ -3,6 +3,7 @@ export enum Objects {
     Annotations = 'annotations',
     Events = 'events',
     Predictions = 'predictions',
+    AnnotationTools = 'annotation_tools',
 }
 
 export enum Actions {
@@ -15,7 +16,7 @@ export enum Actions {
     Vote = 'vote',
 }
 
-export enum HttpMethods {
+export enum HTTPMethods {
     GET = 'GET',
     POST = 'POST',
     PUT = 'PUT',
