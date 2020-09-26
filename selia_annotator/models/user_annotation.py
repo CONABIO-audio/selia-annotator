@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from irekua_database.utils import empty_JSON
 from irekua_database.models import Annotation
-from selia_visualizers.models import Visualizer
+from selia_visualizers.models import VisualizerVersion
 from selia_annotator.models.annotation_tool import AnnotationTool
 
 
@@ -31,7 +31,7 @@ class UserAnnotation(Annotation):
         help_text=_('Annotation tool used when annotating'),
         blank=False)
     visualizer = models.ForeignKey(
-        Visualizer,
+        VisualizerVersion,
         on_delete=models.PROTECT,
         db_column='visualizers_id',
         verbose_name=_('visualizer'),

@@ -9,6 +9,5 @@ urlpatterns = [
         '',
         views.CollectionItemAnnotatorView.as_view(),
         name='annotator_app'),
-    path('annotators/', views.get_annotator, name='get_annotator'),
     # path('api/', include(router.urls)),
 ]
