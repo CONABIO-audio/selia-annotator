@@ -1,7 +1,5 @@
 import json
 
-from django.urls import reverse
-from django.utils.html import mark_safe
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
@@ -11,8 +9,7 @@ from irekua_database.models import ItemType
 from irekua_database.models import AnnotationType
 from irekua_rest_api.serializers import object_types
 
-from selia_annotator.models import AnnotationToolComponent
-from selia_visualizers.models import VisualizerComponentItemType
+# from selia_annotator.models import AnnotationToolComponent
 
 
 class CollectionItemAnnotatorView(TemplateView):
@@ -96,66 +93,30 @@ class CollectionItemAnnotatorView(TemplateView):
             context={'request': self.request})
         return json.dumps(serializer.data)
 
-    def get_annotators(self):
-        if self.collection_type.restrict_annotation_types:
-            types = self.collection_type.annotation_types.all()
-        else:
-            types = AnnotationType.objects.all()
-
-        queryset = (
-            AnnotationToolComponent.objects
-            .filter(
-                annotation_tool__annotation_type__in=types,
-                is_active=True)
-            .select_related(
-                'annotation_tool',
-                'annotation_tool__annotation_type'))
-
-        return json.dumps({
-            item.annotation_tool.annotation_type.id: {
-                'id': item.id,
-                'name': item.annotation_tool.name,
-                'version': item.annotation_tool.version,
-                'module': item.javascript_file.url,
-            }
-            for item in queryset
-        })
-
-    def get_visualizers(self):
-        if self.collection_type.restrict_item_types:
-            types = self.collection_type.item_types.all()
-        else:
-            types = ItemType.objects.all()
-
-        types = (
-            types
-            .filter(
-                mime_types__in=self.device_type.mime_types.all())
-            .distinct())
-
-        print('item type', self.item.item_type, self.item.item_type.id)
-        print('device type', self.device_type, self.device_type.id)
-        print('item type query', types)
-
-        queryset = (
-            VisualizerComponentItemType.objects
-            .filter(item_type__in=types, is_active=True)
-            .select_related(
-                'visualizer_component',
-                'item_type',
-                'visualizer_component__visualizer'))
-
-        print('Visualizers', queryset)
-
-        return json.dumps({
-            item.item_type.id: {
-                'id': item.visualizer_component.visualizer.id,
-                'name': item.visualizer_component.visualizer.name,
-                'version': item.visualizer_component.visualizer.version,
-                'module': item.visualizer_component.javascript_file.url,
-            }
-            for item in queryset
-        })
+    # def get_annotators(self):
+    #     if self.collection_type.restrict_annotation_types:
+    #         types = self.collection_type.annotation_types.all()
+    #     else:
+    #         types = AnnotationType.objects.all()
+    #
+    #     queryset = (
+    #         AnnotationToolComponent.objects
+    #         .filter(
+    #             annotation_tool__annotation_type__in=types,
+    #             is_active=True)
+    #         .select_related(
+    #             'annotation_tool',
+    #             'annotation_tool__annotation_type'))
+    #
+    #     return json.dumps({
+    #         item.annotation_tool.annotation_type.id: {
+    #             'id': item.id,
+    #             'name': item.annotation_tool.name,
+    #             'version': item.annotation_tool.version,
+    #             'module': item.javascript_file.url,
+    #         }
+    #         for item in queryset
+    #     })
 
     def get_context_data(self, *args, **kwargs):
         return {
@@ -163,8 +124,7 @@ class CollectionItemAnnotatorView(TemplateView):
             'items': self.get_items(),
             'item_types': self.get_item_types(),
             'annotation_types': self.get_annotation_types(),
-            'annotators': self.get_annotators(),
-            'visualizers': self.get_visualizers(),
+            # 'annotators': self.get_annotators(),
             'item': self.item,
             'sampling_event_device': self.sampling_event_device,
             'sampling_event': self.sampling_event,

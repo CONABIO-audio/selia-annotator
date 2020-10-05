@@ -5,7 +5,6 @@ from django.utils.translation import gettext_lazy as _
 from irekua_database.utils import empty_JSON
 from irekua_database.models import Annotation
 from selia_visualizers.models import VisualizerVersion
-from selia_annotator.models.annotation_tool import AnnotationTool
 
 
 class UserAnnotation(Annotation):
@@ -23,12 +22,13 @@ class UserAnnotation(Annotation):
         (HIGH, _('certain')),
     ]
 
-    annotation_tool = models.ForeignKey(
-        AnnotationTool,
+    annotator = models.ForeignKey(
+        'AnnotatorVersion',
         on_delete=models.PROTECT,
-        db_column='annotation_tool_id',
-        verbose_name=_('annotation tool'),
-        help_text=_('Annotation tool used when annotating'),
+        db_column='annotator_id',
+        verbose_name=_('annotator'),
+        help_text=_('Annotator used for annotating'),
+        null=False,
         blank=False)
     visualizer = models.ForeignKey(
         VisualizerVersion,
@@ -36,6 +36,7 @@ class UserAnnotation(Annotation):
         db_column='visualizers_id',
         verbose_name=_('visualizer'),
         help_text=_('Visualizer used when annotating'),
+        null=False,
         blank=False)
     visualizer_configuration = models.JSONField(
         db_column='visualizer_configuration',
@@ -78,7 +79,7 @@ class UserAnnotation(Annotation):
         return msg % params
 
     def clean(self):
-        if self.annotation_type != self.annotation_tool.annotation_type:
+        if self.annotation_type != self.annotator.annotator.annotation_type:
             msg = _('Invalid annotation tool for this annotation type')
             raise ValidationError({'annotation_tool': msg})
 

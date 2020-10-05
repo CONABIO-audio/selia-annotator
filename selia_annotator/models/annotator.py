@@ -5,7 +5,7 @@ from irekua_database.models import base
 from irekua_database.models import AnnotationType
 
 
-class AnnotationTool(base.IrekuaModelBase):
+class Annotator(base.IrekuaModelBase):
     annotation_type = models.ForeignKey(
         AnnotationType,
         on_delete=models.CASCADE,
@@ -17,12 +17,6 @@ class AnnotationTool(base.IrekuaModelBase):
         db_column='name',
         verbose_name=_('name'),
         help_text=_('Name of annotation tool'),
-        blank=False)
-    version = models.CharField(
-        max_length=16,
-        db_column='version',
-        verbose_name=_('version'),
-        help_text=_('Version of annotation tool'),
         blank=False)
     logo = models.ImageField(
         db_column='logo',
@@ -39,12 +33,10 @@ class AnnotationTool(base.IrekuaModelBase):
         null=True)
 
     class Meta:
-        verbose_name = _('Annotation Tool')
-        verbose_name_plural = _('Annotation Tools')
-
-        unique_together = (('name', 'version'))
+        verbose_name = _('Annotator')
+        verbose_name_plural = _('Annotators')
 
         ordering = ['name']
 
     def __str__(self):
-        return '{}@{}'.format(self.name, self.version)
+        return str(self.name)

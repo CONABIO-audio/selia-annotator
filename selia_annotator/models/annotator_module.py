@@ -2,7 +2,8 @@ import os
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from selia_annotator.models.annotation_tool import AnnotationTool
+
+from selia_annotator.models.annotator_version import AnnotatorVersion
 
 
 def annotator_path(instance, filename):
@@ -13,34 +14,27 @@ def annotator_path(instance, filename):
         ext=ext)
 
 
-class AnnotationToolComponent(models.Model):
-    annotation_tool = models.OneToOneField(
-        AnnotationTool,
-        on_delete=models.CASCADE,
-        db_column='annotation_tool_id',
-        verbose_name=_('annotation tool'),
-        help_text=_('Annotation tool'),
-        blank=False,
-        null=False)
+class AnnotatorModule(AnnotatorVersion):
     javascript_file = models.FileField(
         upload_to=annotator_path,
         db_column='javascript_file',
         verbose_name=_('javascript file'),
-        help_text=_('Javascript file containing annotator component'),
+        help_text=_('Javascript file containing annotator module'),
         blank=False,
         null=False)
-
     is_active = models.BooleanField(
         db_column='is_active',
         verbose_name=_('is active'),
-        help_text=_('Is annotator tool active?'),
+        help_text=_(
+            'Is this module to be used as default annotator for the '
+            'associated annotation type?'),
         default=True,
         blank=False,
         null=False)
 
     class Meta:
-        verbose_name = _('Annotation Tool Component')
-        verbose_name_plural = _('Annotation Tool Components')
+        verbose_name = _('Annotator Module')
+        verbose_name_plural = _('Annotator Modules')
 
     def deactivate(self):
         self.is_active = False
@@ -48,14 +42,11 @@ class AnnotationToolComponent(models.Model):
 
     def save(self, *args, **kwargs):
         if self.is_active:
-            queryset = AnnotationToolComponent.objects.filter(
-                annotation_tool__annotation_type=self.annotation_tool.annotation_type,
+            queryset = AnnotatorModule.objects.filter(
+                annotator__annotation_type=self.annotator.annotation_type,
                 is_active=True)
             for entry in queryset:
                 if entry != self:
                     entry.deactivate()
 
         super().save(*args, **kwargs)
-
-    def __str__(self):
-        return str(self.annotation_tool)
