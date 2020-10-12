@@ -2,7 +2,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from irekua_database.utils import empty_JSON
+from irekua_core.utils import empty_JSON
+
 from irekua_database.models import Annotation
 from selia_visualizers.models import VisualizerVersion
 
