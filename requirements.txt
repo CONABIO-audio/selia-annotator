@@ -24,7 +24,7 @@ Jinja2==3.0.0a1
 jsonschema==3.2.0
 Markdown==3.2.2
 MarkupSafe==2.0.0a1
-numpy==1.19.0rc2
+numpy==1.22.0rc1
 Pillow==7.1.2
 psycopg2-binary==2.8.5
 pycountry==19.8.18
